@@ -1,0 +1,57 @@
+# encoding: utf-8
+from calibre.web.feeds.recipes import BasicNewsRecipe
+from calibre.ebooks.BeautifulSoup import BeautifulSoup
+from urllib2 import urlopen
+from datetime import datetime
+base_url = 'http://127.0.0.1:8000'
+
+class Mind_Hacks(BasicNewsRecipe):
+
+        title = 'Mind Hacks'
+        description = u'思维改变生活'
+        cover_url = 'http://127.0.0.1:8000/cover.jpg'
+        
+        remove_tags_before = dict(name='article', attrs={'class': "post"})
+        remove_tags_after= dict(name='article', attrs={'class': "post"})
+        __author__ = '刘未鹏'
+        language = 'zh_CN'
+        timefmt = ''
+        encoding = 'utf-8'
+        publication_type = 'blog'
+        no_stylesheets = True
+        remove_javascript = True
+        auto_cleanup = False
+        delay = 1
+        simultaneous_downloads = 5
+        oldest_article = 999
+        max_articles_per_feed = 999
+
+        def parse_index(self):
+                soup = self.index_to_soup("http://mindhacks.cn/archives/")
+                archives = soup.find('ul', class_='car-list')
+                feeds = []
+                desc = ''
+                articles = []
+                last_year = '2017'
+                for section in archives.findAll('a'):
+                        link = section['href']
+                        split = link.split('/')
+                        year = split[3]
+                        date= split[4] + "-" + split[5] + " "
+
+                        title = date + section.getText()
+
+                        if last_year == year:
+                                articles.append({'title':title, 'url': link})
+                        else:
+                                feeds.append((last_year, reversed(articles)))
+#                                for article in articles:
+#                                        print(article)
+#                                print("")
+                                articles = []
+                                articles.append({'title':title, 'url': link})
+                                last_year = year
+
+                feeds.append((last_year, reversed(articles)))
+#                print(feeds)
+                return reversed(feeds)
