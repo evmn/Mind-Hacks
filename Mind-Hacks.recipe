@@ -11,20 +11,26 @@ class Mind_Hacks(BasicNewsRecipe):
         description = u'思维改变生活'
         cover_url = 'http://127.0.0.1:8000/cover.jpg'
         
-        remove_tags_before = dict(name='article', attrs={'class': "post"})
-        remove_tags_after= dict(name='article', attrs={'class': "post"})
-        __author__ = '刘未鹏'
+        remove_tags_before = dict(name='div', attrs={'class': "style_breadcrumbs"})
+        remove_tags_after= dict(name='nav', attrs={'class': "post-navigation"})
+        remove_tags = [dict(name='nav', attrs={'class': "post-navigation"})]
+        __author__ = 'evmn'
         language = 'zh_CN'
         timefmt = ''
         encoding = 'utf-8'
         publication_type = 'blog'
+
+		# Don't Change
         no_stylesheets = True
         remove_javascript = True
         auto_cleanup = False
+
+        resolve_internal_links = True
         delay = 1
         simultaneous_downloads = 5
         oldest_article = 999
         max_articles_per_feed = 999
+        extra_css = 'h1{text-align:center;}'
 
         def parse_index(self):
                 soup = self.index_to_soup("http://mindhacks.cn/archives/")
@@ -39,7 +45,7 @@ class Mind_Hacks(BasicNewsRecipe):
                         year = split[3]
                         date= split[4] + "-" + split[5] + " "
 
-                        title = date + section.getText()
+                        title = section.getText()
 
                         if last_year == year:
                                 articles.append({'title':title, 'url': link})

@@ -6,6 +6,8 @@
 
 今天把刘未鹏老师的博客全部爬了下来，做成了Kindle电子书，希望能够改变思维，改变生活。
 
+![](images/cover.jpg)
+
 ![](images/screenshot.jpg)
 
 ## Reference
